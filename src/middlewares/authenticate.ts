@@ -10,12 +10,17 @@ const authenticate = async (
 ) => {
   try {
     const token = req.cookies[CCToken];
-    const user: JWTPayloadType = jwt.decode(token) as any;
-    console.log(user);
+    const user: JWTPayloadType = jwt.decode(token) as JWTPayloadType;
+
+    if (!user || !user._id)
+      return res.status(401).json({
+        success: false,
+        message: "Please Login.",
+      });
+
     req.params.user = user as unknown as string;
     next();
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Server Error.",

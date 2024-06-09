@@ -6,12 +6,16 @@ import { CCToken } from "../constants/variables.js";
 const userSignup = async (req, res) => {
     try {
         const { name, username, email, password, password_confirmation } = req.body;
-        const checkExisting = await User.findOne({ email, email_verified: true });
-        if (checkExisting)
-            return res.status(401).json({
-                success: false,
-                message: "Account already exists.",
-            });
+        const checkExisting = await User.findOne({ email });
+        if (checkExisting) {
+            if (checkExisting.email_verified) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Account already exists.",
+                });
+            }
+            await User.findByIdAndDelete(checkExisting._id);
+        }
         const checkUsername = await User.findOne({ username });
         if (checkUsername)
             return res.status(401).json({
