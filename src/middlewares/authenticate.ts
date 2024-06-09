@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CCToken } from "../constants/variables.js";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { JWTPayloadType } from "../models/User.js";
 
 const authenticate = async (
   req: Request,
@@ -9,9 +10,9 @@ const authenticate = async (
 ) => {
   try {
     const token = req.cookies[CCToken];
-    const user = jwt.decode(token) as any;
+    const user: JWTPayloadType = jwt.decode(token) as any;
     console.log(user);
-    req.params.user = user;
+    req.params.user = user as unknown as string;
     next();
   } catch (error) {
     console.log(error);

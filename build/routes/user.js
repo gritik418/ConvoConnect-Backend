@@ -1,8 +1,6 @@
 import express from "express";
 import authenticate from "../middlewares/authenticate.js";
+import { getUser } from "../controllers/user.js";
 const router = express.Router();
-router.get("/", authenticate, (req, res) => {
-    console.log(req.params.user);
-    return res.send(req.params.user);
-});
+router.get("/", authenticate, getUser);
 export default router;

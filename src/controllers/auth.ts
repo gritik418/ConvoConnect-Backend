@@ -54,6 +54,12 @@ const userLogin = async (req: Request, res: Response) => {
 
     const user = await User.findOne({
       $or: [{ email: email }, { username: email }],
+    }).select({
+      password: 1,
+      email: 1,
+      username: 1,
+      email_verified: 1,
+      provider: 1,
     });
 
     if (!user || !user.email_verified)
