@@ -31,4 +31,5 @@ const createChatRequest = async (req, res) => {
         });
     }
 };
+// const acceptChatRequest = async (req: Request, res: Response) => {};
 export { createChatRequest };

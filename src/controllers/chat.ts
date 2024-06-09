@@ -40,4 +40,6 @@ const createChatRequest = async (req: Request, res: Response) => {
   }
 };
 
+// const acceptChatRequest = async (req: Request, res: Response) => {};
+
 export { createChatRequest };
