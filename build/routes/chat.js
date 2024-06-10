@@ -1,9 +1,10 @@
 import express from "express";
 import authenticate from "../middlewares/authenticate.js";
-import { acceptChatRequest, createChatRequest, declineChatRequest, getChats, } from "../controllers/chat.js";
+import { acceptChatRequest, createChatRequest, createGroupChat, declineChatRequest, getChats, } from "../controllers/chat.js";
 const router = express.Router();
 router.get("/", authenticate, getChats);
 router.patch("/request", authenticate, createChatRequest);
+router.post("/create", authenticate, createGroupChat);
 router.patch("/decline/:senderId", authenticate, acceptChatRequest);
 router.patch("/accept/:senderId", authenticate, declineChatRequest);
 export default router;
