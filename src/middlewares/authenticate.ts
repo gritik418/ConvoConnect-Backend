@@ -1,7 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 import { CCToken } from "../constants/variables.js";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { JWTPayloadType } from "../models/User.js";
+import jwt from "jsonwebtoken";
+import User, { JWTPayloadType } from "../models/User.js";
+
+export type UserType = {
+  _id: string;
+  name: string;
+  email: string;
+  username: string;
+  avatar: string;
+};
 
 const authenticate = async (
   req: Request,
@@ -10,9 +18,22 @@ const authenticate = async (
 ) => {
   try {
     const token = req.cookies[CCToken];
-    const user: JWTPayloadType = jwt.decode(token) as JWTPayloadType;
+    const userPayload: JWTPayloadType = jwt.decode(token) as JWTPayloadType;
 
-    if (!user || !user._id)
+    if (!userPayload || !userPayload._id)
+      return res.status(401).json({
+        success: false,
+        message: "Please Login.",
+      });
+
+    const user = (await User.findById(userPayload._id).select({
+      name: 1,
+      username: 1,
+      email: 1,
+      avatar: 1,
+    })) as UserType | null;
+
+    if (!user)
       return res.status(401).json({
         success: false,
         message: "Please Login.",

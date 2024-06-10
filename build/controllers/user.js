@@ -2,7 +2,7 @@ import User from "../models/User.js";
 const getUser = async (req, res) => {
     try {
         const userData = req.params.user;
-        const userId = userData._id;
+        const userId = userData._id.toString();
         const user = await User.findById(userId).select({
             name: 1,
             username: 1,
@@ -30,7 +30,7 @@ const getUser = async (req, res) => {
 const getChatRequests = async (req, res) => {
     try {
         const userData = req.params.user;
-        const userId = userData._id;
+        const userId = userData._id.toString();
         if (!userId)
             return res.status(401).json({
                 success: false,

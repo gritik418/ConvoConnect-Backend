@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
-import User, { JWTPayloadType } from "../models/User.js";
+import User from "../models/User.js";
+import { UserType } from "../middlewares/authenticate.js";
 
 const getUser = async (req: Request, res: Response) => {
   try {
-    const userData = req.params.user as unknown as JWTPayloadType;
-    const userId = userData._id;
+    const userData = req.params.user as unknown as UserType;
+    const userId = userData._id.toString();
 
     const user = await User.findById(userId).select({
       name: 1,
@@ -34,8 +35,8 @@ const getUser = async (req: Request, res: Response) => {
 
 const getChatRequests = async (req: Request, res: Response) => {
   try {
-    const userData = req.params.user as unknown as JWTPayloadType;
-    const userId = userData._id;
+    const userData = req.params.user as unknown as UserType;
+    const userId = userData._id.toString();
 
     if (!userId)
       return res.status(401).json({
