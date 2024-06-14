@@ -32,6 +32,12 @@ const UserSchema = new Schema({
         type: String,
         select: false,
     },
+    friends: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+        },
+    ],
     requests: [
         {
             type: Schema.Types.ObjectId,

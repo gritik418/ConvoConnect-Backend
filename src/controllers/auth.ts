@@ -3,6 +3,7 @@ import User, { JWTPayloadType } from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { cookieOptions } from "../constants/options.js";
 import { CCToken } from "../constants/variables.js";
+import { eventEmitter } from "../index.js";
 
 // validation and otp pending
 const userSignup = async (req: Request, res: Response) => {

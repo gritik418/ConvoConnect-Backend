@@ -3,4 +3,8 @@ const cookieOptions = {
     httpOnly: true,
     secure: true,
 };
-export { cookieOptions };
+const corsOptions = {
+    origin: ["http://localhost:3000"],
+    credentials: true,
+};
+export { cookieOptions, corsOptions };

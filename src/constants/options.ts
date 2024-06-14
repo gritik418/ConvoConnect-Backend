@@ -1,3 +1,4 @@
+import { CorsOptions } from "cors";
 import { CookieOptions } from "express";
 
 const cookieOptions: CookieOptions = {
@@ -6,4 +7,9 @@ const cookieOptions: CookieOptions = {
   secure: true,
 };
 
-export { cookieOptions };
+const corsOptions: CorsOptions = {
+  origin: ["http://localhost:3000"],
+  credentials: true,
+};
+
+export { cookieOptions, corsOptions };
