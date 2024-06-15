@@ -8,7 +8,7 @@ const cookieOptions: CookieOptions = {
 };
 
 const corsOptions: CorsOptions = {
-  origin: ["http://localhost:3000"],
+  origin: [process.env.CLIENT_URL!],
   credentials: true,
 };
 
