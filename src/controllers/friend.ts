@@ -9,7 +9,10 @@ export const searchUsers = async (req: Request, res: Response) => {
     const userId = userData._id.toString();
 
     const searchQuery = req.query.search;
-    const users = await User.find({
+
+    const existingFriends = await User.findById(userId).select({ friends: 1 });
+
+    const allUsers = await User.find({
       _id: { $ne: userId },
       email_verified: true,
       $or: [
@@ -19,7 +22,11 @@ export const searchUsers = async (req: Request, res: Response) => {
       ],
     }).select({ name: 1, email: 1, username: 1, avatar: 1 });
 
-    return res.send(users);
+    const users = allUsers.filter((user) => {
+      return !existingFriends.friends.includes(user._id);
+    });
+
+    return res.status(200).json({ success: true, users });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -46,6 +53,17 @@ export const sendFriendRequest = async (req: Request, res: Response) => {
       return res.status(400).json({
         success: false,
         message: "User not found.",
+      });
+
+    const checkExistingRequest = await User.findOne({
+      _id: receiver._id,
+      requests: userId,
+    });
+
+    if (checkExistingRequest)
+      return res.status(200).json({
+        success: true,
+        message: "Friend Request Sent.",
       });
 
     await User.findByIdAndUpdate(receiver._id, {

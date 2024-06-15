@@ -9,7 +9,7 @@ const getChats = async (req: Request, res: Response) => {
 
     const chats = await Chat.find({ members: userId }).populate(
       "members",
-      "name email username avatar"
+      "name email username avatar isActive"
     );
 
     return res.status(200).json({ success: true, chats });

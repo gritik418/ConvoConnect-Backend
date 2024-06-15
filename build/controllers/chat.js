@@ -3,7 +3,7 @@ const getChats = async (req, res) => {
     try {
         const userData = req.params.user;
         const userId = userData._id.toString();
-        const chats = await Chat.find({ members: userId }).populate("members", "name email username avatar");
+        const chats = await Chat.find({ members: userId }).populate("members", "name email username avatar isActive");
         return res.status(200).json({ success: true, chats });
     }
     catch (error) {
