@@ -85,6 +85,7 @@ io.on("connection", (socket) => {
         content: message,
         sender: user._id,
         // attachment: ,
+        updatedAt: Date.now(),
       };
 
       chat.members.map((member: MemberType) => {
