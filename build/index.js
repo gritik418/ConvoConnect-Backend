@@ -43,6 +43,7 @@ io.on("connection", (socket) => {
     });
     socket.on(OFFLINE, async ({ friends, id }) => {
         socket.leave(id);
+        console.log("offline", "id", id);
         await User.findByIdAndUpdate(id, { $set: { isActive: false } });
         if (!friends)
             return;
@@ -55,7 +56,7 @@ io.on("connection", (socket) => {
             _id: uuidv4(),
             chatId: chat._id,
             content: message,
-            sender: user._id,
+            sender: { _id: user._id, name: user.name, avatar: user.avatar },
             // attachment: ,
             updatedAt: Date.now(),
         };

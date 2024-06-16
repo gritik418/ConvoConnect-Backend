@@ -7,7 +7,7 @@ export const getMessages = async (req, res) => {
                 success: false,
                 message: "Chat Id is required.",
             });
-        const messages = await Message.find({ chatId });
+        const messages = await Message.find({ chatId }).populate("sender", "name avatar _id");
         return res.status(200).json({ success: true, messages });
     }
     catch (error) {
