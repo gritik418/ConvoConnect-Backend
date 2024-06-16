@@ -60,7 +60,6 @@ io.on("connection", (socket) => {
 
   socket.on(OFFLINE, async ({ friends, id }) => {
     socket.leave(id);
-    console.log("offline", "id", id);
     await User.findByIdAndUpdate(id, { $set: { isActive: false } });
     if (!friends) return;
 
@@ -89,15 +88,6 @@ io.on("connection", (socket) => {
         updatedAt: Date.now(),
       };
 
-      chat.members.map((member: MemberType) => {
-        if (member._id === user._id) return;
-        socket.to(member._id).emit(MESSAGE_RECEIVED, {
-          chatId: chat._id,
-          message: realTimeMessage,
-          sender: { _id: user._id, name: user.name, avatar: user.avatar },
-        });
-      });
-
       const dbMessage = new Message({
         chatId: chat._id,
         content: message,
@@ -106,6 +96,15 @@ io.on("connection", (socket) => {
       });
 
       await dbMessage.save();
+
+      chat.members.map((member: MemberType) => {
+        if (member._id === user._id) return;
+        socket.to(member._id).emit(MESSAGE_RECEIVED, {
+          chatId: chat._id,
+          message: realTimeMessage,
+          sender: { _id: user._id, name: user.name, avatar: user.avatar },
+        });
+      });
     }
   );
 });
