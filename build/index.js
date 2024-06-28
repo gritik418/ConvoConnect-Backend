@@ -19,6 +19,7 @@ export const eventEmitter = new EventEmitter();
 const port = process.env.PORT || 8000;
 const app = express();
 const server = http.createServer(app);
+const socketMembers = new Map();
 const io = new Server(server, {
     cors: corsOptions,
 });
@@ -33,21 +34,21 @@ app.use("/api/friend", friendRoutes);
 app.use("/api/message", messageRoutes);
 io.on("connection", (socket) => {
     socket.on(ONLINE, async ({ friends, id }) => {
-        socket.join(id);
+        socketMembers.set(id, socket.id);
         await User.findByIdAndUpdate(id, { $set: { isActive: true } });
         if (!friends)
             return;
         friends.forEach((friend) => {
-            socket.to(friend).emit(USER_ONLINE, { id: id });
+            socket.to(socketMembers.get(friend)).emit(USER_ONLINE, { id: id });
         });
     });
     socket.on(OFFLINE, async ({ friends, id }) => {
-        socket.leave(id);
+        socketMembers.delete(id);
         await User.findByIdAndUpdate(id, { $set: { isActive: false } });
         if (!friends)
             return;
         friends.forEach((friend) => {
-            socket.to(friend).emit(USER_OFFLINE, { id: id });
+            socket.to(socketMembers.get(friend)).emit(USER_OFFLINE, { id: id });
         });
     });
     socket.on(SEND_MESSAGE, async ({ chat, message, user, }) => {
@@ -69,7 +70,7 @@ io.on("connection", (socket) => {
         chat.members.map((member) => {
             if (member._id === user._id)
                 return;
-            socket.to(member._id).emit(MESSAGE_RECEIVED, {
+            socket.to(socketMembers.get(member._id)).emit(MESSAGE_RECEIVED, {
                 chatId: chat._id,
                 message: realTimeMessage,
                 sender: { _id: user._id, name: user.name, avatar: user.avatar },
