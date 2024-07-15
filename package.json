@@ -12,7 +12,11 @@
   "author": "Ritik",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^20.14.10",
     "tsc-watch": "^6.2.0",
     "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "mongoose": "^8.5.1"
   }
 }
