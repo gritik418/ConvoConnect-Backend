@@ -12,11 +12,18 @@
   "author": "Ritik",
   "license": "ISC",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.7",
+    "@types/express": "^4.17.21",
     "@types/node": "^20.14.10",
     "tsc-watch": "^6.2.0",
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "mongoose": "^8.5.1"
+    "@apollo/server": "^4.10.4",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "graphql": "^16.9.0",
+    "mongoose": "^8.5.1",
+    "socket.io": "^4.7.5"
   }
 }
