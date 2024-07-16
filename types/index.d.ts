@@ -9,6 +9,7 @@ interface UserType {
   email: string;
   username: string;
   email_verified: boolean;
+  is_active: boolean;
   avatar?: string;
   provider: Provider;
   password?: string;
@@ -31,3 +32,13 @@ interface MessageType {
   sender: string;
   attachment: any;
 }
+
+type JWTPayloadType = {
+  id: string;
+  email: string;
+};
+
+type EmailVerificationDataType = {
+  user_id: string;
+  secret_token: string;
+};

@@ -1,6 +1,7 @@
 import http from "http";
 import { Server } from "socket.io";
 import cookieParser from "cookie-parser";
+import { corsOptions } from "../constants/options.js";
 
 const socketServer = (
   httpServer: http.Server<
@@ -8,7 +9,7 @@ const socketServer = (
     typeof http.ServerResponse
   >
 ) => {
-  const io = new Server(httpServer);
+  const io = new Server(httpServer, { cors: corsOptions });
 
   io.use((socket: any) => {
     cookieParser()(socket.request, socket.request.res, (err) => {

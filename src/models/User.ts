@@ -34,6 +34,10 @@ const UserSchema = new Schema(
       default: "credentials",
       enum: ["credentials", "google"],
     },
+    is_active: {
+      type: Boolean,
+      default: false,
+    },
     password: {
       type: String,
       select: false,

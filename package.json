@@ -6,24 +6,34 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/index.js",
+    "start": "node --env-file=.env dist/index.js",
     "dev": "tsc-watch --onSuccess \"npm start\""
   },
   "author": "Ritik",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.7",
     "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.14.10",
+    "@types/nodemailer": "^6.4.15",
+    "@types/uuid": "^10.0.0",
     "tsc-watch": "^6.2.0",
     "typescript": "^5.5.3"
   },
   "dependencies": {
     "@apollo/server": "^4.10.4",
+    "@vinejs/vine": "^2.1.0",
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "graphql": "^16.9.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.1",
-    "socket.io": "^4.7.5"
+    "nodemailer": "^6.9.14",
+    "socket.io": "^4.7.5",
+    "uuid": "^10.0.0"
   }
 }
