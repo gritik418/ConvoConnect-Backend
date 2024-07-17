@@ -1,6 +1,11 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 class UserService {
+    static async getUserById(id) {
+        const user = await User.findById(id);
+        return user;
+    }
     static async getUserByEmail(email) {
         const user = await User.findOne({ email, email_verified: true });
         return user;
@@ -22,6 +27,10 @@ class UserService {
             $or: [{ email }, { username: email }],
         });
         return user;
+    }
+    static async generateAuthToken(payload) {
+        const authToken = jwt.sign(payload, process.env.JWT_TOKEN);
+        return authToken;
     }
 }
 export default UserService;

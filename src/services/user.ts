@@ -3,6 +3,11 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 class UserService {
+  public static async getUserById(id: string) {
+    const user = await User.findById(id);
+    return user;
+  }
+
   public static async getUserByEmail(email: string) {
     const user = await User.findOne({ email, email_verified: true });
     return user;
