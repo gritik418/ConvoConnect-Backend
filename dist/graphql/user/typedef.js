@@ -9,8 +9,6 @@ const typedef = `#graphql
         avatar: String
         provider: String
         is_active: Boolean
-        friends: [String]
-        friend_requests: [User]
     }
 `;
 export default typedef;

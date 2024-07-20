@@ -9,6 +9,7 @@ const authenticate = async (
 ) => {
   try {
     const token = req.cookies[CC_TOKEN];
+    console.log(token);
     if (!token)
       return res.status(401).json({
         success: false,
@@ -16,6 +17,7 @@ const authenticate = async (
       });
 
     const verify: any = await UserService.verifyAuthToken(token);
+    console.log(verify);
     if (!verify)
       return res.status(401).json({
         success: false,

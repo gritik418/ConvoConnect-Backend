@@ -3,12 +3,14 @@ import UserService from "../services/user.js";
 const authenticate = async (req, res, next) => {
     try {
         const token = req.cookies[CC_TOKEN];
+        console.log(token);
         if (!token)
             return res.status(401).json({
                 success: false,
                 message: "Please Login.",
             });
         const verify = await UserService.verifyAuthToken(token);
+        console.log(verify);
         if (!verify)
             return res.status(401).json({
                 success: false,

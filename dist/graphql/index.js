@@ -10,9 +10,6 @@ const connectGraphQLServer = () => {
       }
     `,
         resolvers: {
-            User: {
-                ...user.resolvers.user,
-            },
             Query: {
                 ...user.resolvers.queries,
             },
