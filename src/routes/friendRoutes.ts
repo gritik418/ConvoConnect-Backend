@@ -2,6 +2,7 @@ import { Router } from "express";
 import authenticate from "../middlewares/authenticate.js";
 import {
   acceptFriendRequest,
+  declineFriendRequest,
   getActiveFriends,
   getFriendRequests,
   sendFriendRequest,
@@ -14,6 +15,8 @@ router.get("/getFriendRequests", authenticate, getFriendRequests);
 router.patch("/sendFriendRequest/:id", authenticate, sendFriendRequest);
 
 router.patch("/acceptFriendRequest/:id", authenticate, acceptFriendRequest);
+
+router.patch("/declineFriendRequest/:id", authenticate, declineFriendRequest);
 
 router.get("/getActiveFriends", authenticate, getActiveFriends);
 

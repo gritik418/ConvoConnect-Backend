@@ -101,6 +101,29 @@ export const acceptFriendRequest = async (req: Request, res: Response) => {
   }
 };
 
+export const declineFriendRequest = async (req: Request, res: Response) => {
+  try {
+    const user: any = req.params.user;
+    const friendId: string = req.params.id;
+
+    await User.findByIdAndUpdate(user._id, {
+      $pull: {
+        friend_requests: friendId,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Friend Request Declined.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server Error.",
+    });
+  }
+};
+
 export const getActiveFriends = async (req: Request, res: Response) => {
   try {
     const user: any = req.params.user;
