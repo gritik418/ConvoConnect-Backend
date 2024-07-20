@@ -17,7 +17,7 @@ import verificationSchema, {
 
 vine.errorReporter = () => new ErrorReporter();
 
-// Design Email Verification Template
+// Design Email Verification Template and also email subject
 export const userSignup = async (req: Request, res: Response) => {
   try {
     const data = req.body;
@@ -69,7 +69,7 @@ export const userSignup = async (req: Request, res: Response) => {
       to: output.email,
       subject: "Verify your email address.",
       html: `Any ${secretToken} <br/>
-        Link: ${"http://localhost:3000"}/verify/${savedUser._id.toString()}/${secretToken}
+        <a href=${"http://localhost:3000"}/verify/${savedUser._id.toString()}/${secretToken}>Verify</a>
         `,
       text: "Verify your email address to continue with ConvoConnect.",
     });
@@ -77,6 +77,7 @@ export const userSignup = async (req: Request, res: Response) => {
     return res.status(201).json({
       success: true,
       message: "Email Sent.",
+      email: output.email,
     });
   } catch (error) {
     if (error instanceof errors.E_VALIDATION_ERROR) {
@@ -150,9 +151,9 @@ export const userLogin = async (req: Request, res: Response) => {
 
 export const verifyEmail = async (req: Request, res: Response) => {
   try {
-    const data = req.body;
+    const { secretToken, id } = req.params;
     const output: VerificationDataType = await vine.validate({
-      data,
+      data: { secret_token: secretToken, id },
       schema: verificationSchema,
     });
 

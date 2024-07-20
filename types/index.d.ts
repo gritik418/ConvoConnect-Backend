@@ -4,6 +4,7 @@ declare enum Provider {
 }
 
 interface UserType {
+  id: string;
   first_name: string;
   last_name?: string;
   email: string;
@@ -33,10 +34,10 @@ interface MessageType {
   attachment: any;
 }
 
-type JWTPayloadType = {
+interface JWTPayloadType {
   id: string;
   email: string;
-};
+}
 
 type EmailVerificationDataType = {
   user_id: string;

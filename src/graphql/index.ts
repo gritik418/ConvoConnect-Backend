@@ -1,13 +1,23 @@
 import { ApolloServer } from "@apollo/server";
+import user from "./user/index.js";
 
 const connectGraphQLServer = () => {
   const server = new ApolloServer({
-    typeDefs: `
+    typeDefs: `#graphql
+      ${user.typedef}
+
       type Query {
-      name: String
+        ${user.queries}
       }
     `,
-    resolvers: {},
+    resolvers: {
+      User: {
+        ...user.resolvers.user,
+      },
+      Query: {
+        ...user.resolvers.queries,
+      },
+    },
   });
 
   return server;

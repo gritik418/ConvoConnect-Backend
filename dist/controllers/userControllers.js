@@ -12,7 +12,7 @@ import { CC_TOKEN } from "../constants/variables.js";
 import { cookieOptions } from "../constants/options.js";
 import verificationSchema from "../validators/verificationValidator.js";
 vine.errorReporter = () => new ErrorReporter();
-// Design Email Verification Template
+// Design Email Verification Template and also email subject
 export const userSignup = async (req, res) => {
     try {
         const data = req.body;
@@ -56,13 +56,14 @@ export const userSignup = async (req, res) => {
             to: output.email,
             subject: "Verify your email address.",
             html: `Any ${secretToken} <br/>
-        Link: ${"http://localhost:3000"}/verify/${savedUser._id.toString()}/${secretToken}
+        <a href=${"http://localhost:3000"}/verify/${savedUser._id.toString()}/${secretToken}>Verify</a>
         `,
             text: "Verify your email address to continue with ConvoConnect.",
         });
         return res.status(201).json({
             success: true,
             message: "Email Sent.",
+            email: output.email,
         });
     }
     catch (error) {
@@ -131,9 +132,9 @@ export const userLogin = async (req, res) => {
 };
 export const verifyEmail = async (req, res) => {
     try {
-        const data = req.body;
+        const { secretToken, id } = req.params;
         const output = await vine.validate({
-            data,
+            data: { secret_token: secretToken, id },
             schema: verificationSchema,
         });
         const user = await UserService.getUserById(output.id);

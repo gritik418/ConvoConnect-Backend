@@ -39,6 +39,23 @@ class UserService {
     const authToken = jwt.sign(payload, process.env.JWT_TOKEN!);
     return authToken;
   }
+
+  public static async verifyAuthToken(token: string) {
+    const verify = jwt.verify(token, process.env.JWT_TOKEN!);
+    return verify;
+  }
+
+  public static async setUserToActive(id: string) {
+    await User.findByIdAndUpdate(id, {
+      $set: { is_active: true },
+    });
+  }
+
+  public static async setUserToInActive(id: string) {
+    await User.findByIdAndUpdate(id, {
+      $set: { is_active: false },
+    });
+  }
 }
 
 export default UserService;
