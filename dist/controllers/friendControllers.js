@@ -112,12 +112,19 @@ export const declineFriendRequest = async (req, res) => {
 export const getActiveFriends = async (req, res) => {
     try {
         const user = req.params.user;
-        const friends = await User.findById(user?._id.toString())
-            .select({ friends: 1 })
-            .populate("friends")
-            .where({ is_active: true });
-        console.log(friends);
-        return res.json({ friends });
+        const { friends } = await User.findById(user?._id.toString())
+            .select({ friends: 1, _id: 0 })
+            .populate("friends", {
+            is_active: 1,
+            first_name: 1,
+            last_name: 1,
+            avatar: 1,
+            username: 1,
+        });
+        const activeFriends = friends.filter((friend) => {
+            return friend.is_active;
+        });
+        return res.status(200).json({ success: true, data: { activeFriends } });
     }
     catch (error) {
         return res.status(500).json({
