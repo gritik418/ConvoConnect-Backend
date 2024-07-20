@@ -5,10 +5,13 @@ import {
   declineFriendRequest,
   getActiveFriends,
   getFriendRequests,
+  searchUsers,
   sendFriendRequest,
 } from "../controllers/friendControllers.js";
 
 const router = Router();
+
+router.get("/searchUser", authenticate, searchUsers);
 
 router.get("/getFriendRequests", authenticate, getFriendRequests);
 
