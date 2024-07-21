@@ -10,6 +10,7 @@ import connectDB from "./database/db.config.js";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
 import friendRoutes from "./routes/friendRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -38,6 +39,7 @@ app.use(
 
 app.use("/api/user", userRoutes);
 app.use("/api/friend", friendRoutes);
+app.use("/api/chat", chatRoutes);
 
 server.listen(PORT, () => {
   console.log(`App served at port: ${PORT}`);

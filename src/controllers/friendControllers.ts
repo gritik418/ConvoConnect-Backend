@@ -36,7 +36,6 @@ export const searchUsers = async (req: Request, res: Response) => {
       data: { searchResult },
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Server Error.",
