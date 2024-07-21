@@ -4,6 +4,13 @@ import cookieParser from "cookie-parser";
 import { corsOptions } from "../constants/options.js";
 import { CC_TOKEN } from "../constants/variables.js";
 import UserService from "../services/user.js";
+import {
+  ACTIVE_FRIENDS,
+  NEW_MESSAGE,
+  SEND_MESSAGE,
+} from "../constants/events.js";
+import Message from "../models/Message.js";
+import { v4 as uuidv4 } from "uuid";
 
 const socketMembers = new Map();
 
@@ -32,7 +39,49 @@ const socketServer = (
   io.on("connection", async (socket: any) => {
     socketMembers.set(socket.user._id.toString(), socket.id);
     await UserService.setUserToActive(socket.user._id.toString());
-    // console.log(socketMembers.keys());
+
+    socket.user.friends.map((friend: string) => {
+      if (!socketMembers.get(friend.toString())) return;
+      return io.to(socketMembers.get(friend.toString())).emit(ACTIVE_FRIENDS, {
+        id: socket.user._id.toString(),
+      });
+    });
+
+    socket.on(
+      SEND_MESSAGE,
+      async ({
+        message,
+        selectedChat,
+      }: {
+        message: string;
+        selectedChat: ChatType;
+      }) => {
+        const newMessage = new Message({
+          chat_id: selectedChat._id,
+          content: message,
+          sender: socket.user._id.toString(),
+        });
+
+        const realTimeMessage = {
+          _id: uuidv4().toString(),
+          chat_id: selectedChat._id,
+          content: message,
+          sender: socket.user._id.toString(),
+        };
+
+        selectedChat.members.map((member: ChatMemberType) => {
+          if (member._id.toString() === socket.user._id.toString()) return;
+          if (!socketMembers.get(member._id.toString())) return;
+          return io
+            .to(socketMembers.get(member._id.toString()))
+            .emit(NEW_MESSAGE, {
+              chat: selectedChat,
+              message: realTimeMessage,
+            });
+        });
+        await newMessage.save();
+      }
+    );
 
     socket.on("disconnect", async () => {
       socketMembers.delete(socket.user._id.toString());

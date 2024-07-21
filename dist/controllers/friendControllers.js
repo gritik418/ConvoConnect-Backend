@@ -173,9 +173,12 @@ export const getActiveFriends = async (req, res) => {
             last_name: 1,
             avatar: 1,
             username: 1,
+            _id: 1,
         });
-        const activeFriends = friends.filter((friend) => {
-            return friend.is_active;
+        const activeFriends = friends.map((friend) => {
+            if (friend.is_active) {
+                return friend._id;
+            }
         });
         return res.status(200).json({ success: true, data: { activeFriends } });
     }

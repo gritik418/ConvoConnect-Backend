@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
 import friendRoutes from "./routes/friendRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
 const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 8000;
@@ -31,6 +32,7 @@ app.use("/graphql", cors(corsOptions), expressMiddleware(gqlServer, {
 app.use("/api/user", userRoutes);
 app.use("/api/friend", friendRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/message", messageRoutes);
 server.listen(PORT, () => {
     console.log(`App served at port: ${PORT}`);
 });

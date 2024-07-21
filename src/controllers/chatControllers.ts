@@ -5,7 +5,19 @@ export const getChats = async (req: Request, res: Response) => {
   try {
     const user: any = req.params.user;
 
-    const chats = await Chat.find({ members: { $eq: user._id } });
+    const chats = await Chat.find({ members: { $eq: user._id } })
+      .populate("members", {
+        first_name: 1,
+        last_name: 1,
+        avatar: 1,
+        username: 1,
+      })
+      .populate("admins", {
+        first_name: 1,
+        last_name: 1,
+        avatar: 1,
+        username: 1,
+      });
 
     return res.status(200).json({ success: true, data: { chats } });
   } catch (error) {

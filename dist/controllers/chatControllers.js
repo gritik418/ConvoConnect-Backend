@@ -2,7 +2,19 @@ import Chat from "../models/Chat.js";
 export const getChats = async (req, res) => {
     try {
         const user = req.params.user;
-        const chats = await Chat.find({ members: { $eq: user._id } });
+        const chats = await Chat.find({ members: { $eq: user._id } })
+            .populate("members", {
+            first_name: 1,
+            last_name: 1,
+            avatar: 1,
+            username: 1,
+        })
+            .populate("admins", {
+            first_name: 1,
+            last_name: 1,
+            avatar: 1,
+            username: 1,
+        });
         return res.status(200).json({ success: true, data: { chats } });
     }
     catch (error) {
