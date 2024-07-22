@@ -9,7 +9,11 @@ import { v4 as uuidv4 } from "uuid";
 import Chat from "../models/Chat.js";
 const socketMembers = new Map();
 const socketServer = (httpServer) => {
-    const io = new Server(httpServer, { cors: corsOptions });
+    const io = new Server(httpServer, {
+        cors: corsOptions,
+        transports: ["polling", "websocket"],
+        wsEngine: ["ws", "wss"],
+    });
     io.use((socket, next) => {
         cookieParser()(socket.request, socket.request.res, async (err) => {
             if (err)
