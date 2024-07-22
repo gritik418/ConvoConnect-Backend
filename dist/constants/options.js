@@ -1,6 +1,6 @@
 export const corsOptions = {
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
 };
 export const cookieOptions = {
