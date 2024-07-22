@@ -39,7 +39,7 @@ const socketServer = (
   });
 
   io.on("connection", async (socket: any) => {
-    socketMembers.set(socket.user._id, socket.id);
+    socketMembers.set(socket.user._id.toString(), socket.id);
     await UserService.setUserToActive(socket.user._id.toString());
 
     socket.user.friends.map((friend: string) => {
@@ -75,6 +75,7 @@ const socketServer = (
             avatar: socket.user.avatar,
             username: socket.user.username,
           },
+          updatedAt: Date.now(),
         };
 
         selectedChat.members.map((member: ChatMemberType) => {
@@ -95,7 +96,6 @@ const socketServer = (
     );
 
     socket.on("disconnect", async () => {
-      socketMembers.delete(socket.user._id.toString());
       await UserService.setUserToInActive(socket.user._id.toString());
 
       socket.user.friends.map((friend: string) => {
@@ -106,6 +106,7 @@ const socketServer = (
             id: socket.user._id.toString(),
           });
       });
+      socketMembers.delete(socket.user._id.toString());
     });
   });
 };

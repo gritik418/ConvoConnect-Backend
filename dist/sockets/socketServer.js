@@ -28,7 +28,7 @@ const socketServer = (httpServer) => {
         });
     });
     io.on("connection", async (socket) => {
-        socketMembers.set(socket.user._id, socket.id);
+        socketMembers.set(socket.user._id.toString(), socket.id);
         await UserService.setUserToActive(socket.user._id.toString());
         socket.user.friends.map((friend) => {
             if (!socketMembers.get(friend.toString()))
@@ -54,6 +54,7 @@ const socketServer = (httpServer) => {
                     avatar: socket.user.avatar,
                     username: socket.user.username,
                 },
+                updatedAt: Date.now(),
             };
             selectedChat.members.map((member) => {
                 if (member._id.toString() === socket.user._id.toString())
@@ -73,7 +74,6 @@ const socketServer = (httpServer) => {
             });
         });
         socket.on("disconnect", async () => {
-            socketMembers.delete(socket.user._id.toString());
             await UserService.setUserToInActive(socket.user._id.toString());
             socket.user.friends.map((friend) => {
                 if (!socketMembers.get(friend.toString()))
@@ -84,6 +84,7 @@ const socketServer = (httpServer) => {
                     id: socket.user._id.toString(),
                 });
             });
+            socketMembers.delete(socket.user._id.toString());
         });
     });
 };
