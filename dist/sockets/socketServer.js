@@ -6,6 +6,7 @@ import UserService from "../services/user.js";
 import { ACTIVE_FRIENDS, NEW_MESSAGE, OFFLINE_FRIEND, SEND_MESSAGE, } from "../constants/events.js";
 import Message from "../models/Message.js";
 import { v4 as uuidv4 } from "uuid";
+import Chat from "../models/Chat.js";
 const socketMembers = new Map();
 const socketServer = (httpServer) => {
     const io = new Server(httpServer, { cors: corsOptions });
@@ -66,7 +67,10 @@ const socketServer = (httpServer) => {
                     chat: selectedChat,
                 });
             });
-            await newMessage.save();
+            const savedMessage = await newMessage.save();
+            await Chat.findByIdAndUpdate(selectedChat._id, {
+                $set: { last_message: savedMessage._id },
+            });
         });
         socket.on("disconnect", async () => {
             socketMembers.delete(socket.user._id.toString());

@@ -12,6 +12,7 @@ import {
 } from "../constants/events.js";
 import Message from "../models/Message.js";
 import { v4 as uuidv4 } from "uuid";
+import Chat from "../models/Chat.js";
 
 const socketMembers = new Map();
 
@@ -86,7 +87,10 @@ const socketServer = (
               chat: selectedChat,
             });
         });
-        await newMessage.save();
+        const savedMessage = await newMessage.save();
+        await Chat.findByIdAndUpdate(selectedChat._id, {
+          $set: { last_message: savedMessage._id },
+        });
       }
     );
 
