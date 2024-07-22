@@ -12,7 +12,6 @@ const socketServer = (httpServer) => {
     const io = new Server(httpServer, {
         cors: corsOptions,
         transports: ["polling", "websocket"],
-        wsEngine: ["ws", "wss"],
     });
     io.use((socket, next) => {
         cookieParser()(socket.request, socket.request.res, async (err) => {

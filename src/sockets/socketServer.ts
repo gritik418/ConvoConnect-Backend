@@ -25,7 +25,6 @@ const socketServer = (
   const io = new Server(httpServer, {
     cors: corsOptions,
     transports: ["polling", "websocket"],
-    wsEngine: ["ws", "wss"],
   });
 
   io.use((socket: any, next) => {
