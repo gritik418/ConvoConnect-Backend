@@ -26,6 +26,7 @@ const UserSchema = new Schema({
     },
     avatar: {
         type: String,
+        default: `${process.env.DOMAIN}/images/avatar.jpeg`,
     },
     provider: {
         type: String,

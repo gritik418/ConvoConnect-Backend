@@ -39,7 +39,7 @@ const socketServer = (
   });
 
   io.on("connection", async (socket: any) => {
-    socketMembers.set(socket.user._id.toString(), socket.id);
+    socketMembers.set(socket.user._id, socket.id);
     await UserService.setUserToActive(socket.user._id.toString());
 
     socket.user.friends.map((friend: string) => {

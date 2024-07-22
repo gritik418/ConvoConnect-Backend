@@ -12,10 +12,14 @@ import userRoutes from "./routes/userRoutes.js";
 import friendRoutes from "./routes/friendRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 8000;
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
+const staticPath = path.resolve(__dirname, "../public");
 
 connectDB();
 socketServer(server);
@@ -24,6 +28,7 @@ const gqlServer = connectGraphQLServer();
 await gqlServer.start();
 
 app.use(cors(corsOptions));
+app.use(express.static(staticPath));
 app.use(express.json());
 app.use(cookieParser());
 
