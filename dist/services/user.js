@@ -29,12 +29,22 @@ class UserService {
         return user;
     }
     static async generateAuthToken(payload) {
-        const authToken = jwt.sign(payload, process.env.JWT_TOKEN);
-        return authToken;
+        try {
+            const authToken = jwt.sign(payload, process.env.JWT_TOKEN);
+            return authToken;
+        }
+        catch (error) {
+            return null;
+        }
     }
     static async verifyAuthToken(token) {
-        const verify = jwt.verify(token, process.env.JWT_TOKEN);
-        return verify;
+        try {
+            const verify = jwt.verify(token, process.env.JWT_TOKEN);
+            return verify;
+        }
+        catch (error) {
+            return null;
+        }
     }
     static async setUserToActive(id) {
         await User.findByIdAndUpdate(id, {

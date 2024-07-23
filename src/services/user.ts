@@ -36,13 +36,21 @@ class UserService {
   }
 
   public static async generateAuthToken(payload: JWTPayloadType) {
-    const authToken = jwt.sign(payload, process.env.JWT_TOKEN!);
-    return authToken;
+    try {
+      const authToken = jwt.sign(payload, process.env.JWT_TOKEN!);
+      return authToken;
+    } catch (error) {
+      return null;
+    }
   }
 
   public static async verifyAuthToken(token: string) {
-    const verify = jwt.verify(token, process.env.JWT_TOKEN!);
-    return verify;
+    try {
+      const verify = jwt.verify(token, process.env.JWT_TOKEN!);
+      return verify;
+    } catch (error) {
+      return null;
+    }
   }
 
   public static async setUserToActive(id: string) {

@@ -29,9 +29,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/graphql", cors(corsOptions), expressMiddleware(gqlServer, {
     context: async ({ req }) => {
-        if (!req.cookies[CC_TOKEN])
+        try {
+            if (!req.cookies[CC_TOKEN])
+                return null;
+            return { token: req.cookies[CC_TOKEN] };
+        }
+        catch (error) {
             return null;
-        return { token: req.cookies[CC_TOKEN] };
+        }
     },
 }));
 app.use("/api/user", userRoutes);

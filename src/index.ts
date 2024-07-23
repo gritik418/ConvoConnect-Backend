@@ -37,8 +37,12 @@ app.use(
   cors(corsOptions),
   expressMiddleware(gqlServer, {
     context: async ({ req }) => {
-      if (!req.cookies[CC_TOKEN]) return null;
-      return { token: req.cookies[CC_TOKEN] };
+      try {
+        if (!req.cookies[CC_TOKEN]) return null;
+        return { token: req.cookies[CC_TOKEN] };
+      } catch (error) {
+        return null;
+      }
     },
   })
 );
