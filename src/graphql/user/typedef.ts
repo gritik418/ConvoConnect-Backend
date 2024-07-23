@@ -9,6 +9,7 @@ const typedef = `#graphql
         avatar: String
         provider: String
         is_active: Boolean
+        bio: String
     }
 `;
 

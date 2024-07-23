@@ -24,6 +24,10 @@ const UserSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    bio: {
+        type: String,
+        trim: true,
+    },
     avatar: {
         type: String,
         default: `${process.env.DOMAIN}/images/avatar.jpeg`,
