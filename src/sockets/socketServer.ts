@@ -79,6 +79,7 @@ const socketServer = (
             username: socket.user.username,
           },
           updatedAt: Date.now(),
+          createdAt: Date.now(),
         };
 
         selectedChat.members.map((member: ChatMemberType) => {

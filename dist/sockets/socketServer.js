@@ -58,6 +58,7 @@ const socketServer = (httpServer) => {
                     username: socket.user.username,
                 },
                 updatedAt: Date.now(),
+                createdAt: Date.now(),
             };
             selectedChat.members.map((member) => {
                 if (member._id.toString() === socket.user._id.toString())
