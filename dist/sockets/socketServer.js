@@ -11,7 +11,7 @@ const socketMembers = new Map();
 const socketServer = (httpServer) => {
     const io = new Server(httpServer, {
         cors: corsOptions,
-        transports: ["polling", "websocket"],
+        transports: ["websocket"],
     });
     io.use((socket, next) => {
         cookieParser()(socket.request, socket.request.res, async (err) => {

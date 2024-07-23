@@ -24,7 +24,7 @@ const socketServer = (
 ) => {
   const io = new Server(httpServer, {
     cors: corsOptions,
-    transports: ["polling", "websocket"],
+    transports: ["websocket"],
   });
 
   io.use((socket: any, next) => {

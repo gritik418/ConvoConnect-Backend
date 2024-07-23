@@ -5,7 +5,7 @@ export const getMessages = async (req: Request, res: Response) => {
   try {
     const chatId = req.params.id;
 
-    const messages = await Message.find({ chat_id: chatId }).populate(
+    const rawMessages: any = await Message.find({ chat_id: chatId }).populate(
       "sender",
       {
         first_name: 1,
@@ -15,6 +15,12 @@ export const getMessages = async (req: Request, res: Response) => {
         username: 1,
       }
     );
+
+    const messages: any = {};
+
+    for (const message of rawMessages) {
+      messages[message._id] = message;
+    }
 
     return res.status(200).json({ success: true, data: messages });
   } catch (error) {
