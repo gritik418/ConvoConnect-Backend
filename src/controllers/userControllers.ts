@@ -17,6 +17,22 @@ import verificationSchema, {
 
 vine.errorReporter = () => new ErrorReporter();
 
+export const getUser = async (req: Request, res: Response) => {
+  try {
+    const user: any = req.params.user;
+
+    return res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server Error.",
+    });
+  }
+};
+
 // Design Email Verification Template and also email subject
 export const userSignup = async (req: Request, res: Response) => {
   try {

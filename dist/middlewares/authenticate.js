@@ -1,5 +1,6 @@
 import { CC_TOKEN } from "../constants/variables.js";
 import UserService from "../services/user.js";
+import User from "../models/User.js";
 const authenticate = async (req, res, next) => {
     try {
         const token = req.cookies[CC_TOKEN];
@@ -14,7 +15,7 @@ const authenticate = async (req, res, next) => {
                 success: false,
                 message: "Please Login.",
             });
-        const user = await UserService.getUserById(verify.id);
+        const user = await User.findById(verify.id).select({ password: 0 });
         if (!user)
             return res.status(401).json({
                 success: false,

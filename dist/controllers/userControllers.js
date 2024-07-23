@@ -12,6 +12,21 @@ import { CC_TOKEN } from "../constants/variables.js";
 import { cookieOptions } from "../constants/options.js";
 import verificationSchema from "../validators/verificationValidator.js";
 vine.errorReporter = () => new ErrorReporter();
+export const getUser = async (req, res) => {
+    try {
+        const user = req.params.user;
+        return res.status(200).json({
+            success: true,
+            data: user,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server Error.",
+        });
+    }
+};
 // Design Email Verification Template and also email subject
 export const userSignup = async (req, res) => {
     try {
