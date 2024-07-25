@@ -62,7 +62,10 @@ export const createGroupChat = async (req, res) => {
         const user = req.params.user;
         const data = req.body;
         const output = await vine.validate({
-            data,
+            data: {
+                group_name: data.group_name,
+                members: data.members,
+            },
             schema: groupSchema,
         });
         let group_icon = "";
@@ -73,7 +76,7 @@ export const createGroupChat = async (req, res) => {
             is_group_chat: true,
             group_name: output.group_name,
             group_description: data.group_description || "",
-            group_icon: group_icon,
+            group_icon,
             admins: [user._id],
             members: [user._id, ...output.members],
         });
