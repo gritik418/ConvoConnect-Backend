@@ -25,6 +25,7 @@ const gqlServer = connectGraphQLServer();
 await gqlServer.start();
 app.use(cors(corsOptions));
 app.use(express.static(staticPath));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 app.use("/graphql", cors(corsOptions), expressMiddleware(gqlServer, {

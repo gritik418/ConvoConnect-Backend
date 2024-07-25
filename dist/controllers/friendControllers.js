@@ -1,5 +1,30 @@
 import User from "../models/User.js";
 import Chat from "../models/Chat.js";
+export const getFriends = async (req, res) => {
+    try {
+        const user = req.params.user;
+        const friends = await User.findById(user._id)
+            .select({ friends: 1, _id: 0 })
+            .populate("friends", {
+            avatar: 1,
+            _id: 1,
+            first_name: 1,
+            last_name: 1,
+            email: 1,
+            username: 1,
+        });
+        return res.status(200).json({
+            success: true,
+            data: friends,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server Error.",
+        });
+    }
+};
 export const searchUsers = async (req, res) => {
     try {
         const user = req.params.user;

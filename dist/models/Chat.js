@@ -7,6 +7,9 @@ const ChatSchema = new Schema({
     group_name: {
         type: String,
     },
+    group_description: {
+        type: String,
+    },
     group_icon: {
         type: String,
     },

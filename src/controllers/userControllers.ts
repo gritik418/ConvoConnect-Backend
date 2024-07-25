@@ -17,6 +17,47 @@ import verificationSchema, {
 
 vine.errorReporter = () => new ErrorReporter();
 
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const user: any = req.params.user;
+    const data = req.body;
+
+    if (req.file) {
+      const avatar = `${
+        process.env.DOMAIN
+      }/uploads/${user._id.toString()}/avatar/${req.file?.originalname}`;
+
+      await User.findByIdAndUpdate(user._id, {
+        $set: {
+          ...data,
+          avatar,
+        },
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: "Details Updated.",
+      });
+    }
+
+    await User.findByIdAndUpdate(user._id, {
+      $set: {
+        ...data,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Details Updated.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server Error.",
+    });
+  }
+};
+
 export const getUser = async (req: Request, res: Response) => {
   try {
     const user: any = req.params.user;
