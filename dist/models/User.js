@@ -32,6 +32,10 @@ const UserSchema = new Schema({
         type: String,
         default: `${process.env.DOMAIN}/images/avatar.jpeg`,
     },
+    background: {
+        type: String,
+        default: `${process.env.DOMAIN}/images/profile-bg.jpg`,
+    },
     provider: {
         type: String,
         default: "credentials",

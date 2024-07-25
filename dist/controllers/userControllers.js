@@ -16,26 +16,33 @@ export const updateUser = async (req, res) => {
     try {
         const user = req.params.user;
         const data = req.body;
-        if (req.file) {
-            const avatar = `${process.env.DOMAIN}/uploads/${user._id.toString()}/avatar/${req.file?.originalname}`;
-            await User.findByIdAndUpdate(user._id, {
-                $set: {
-                    ...data,
-                    avatar,
-                },
-            });
-            return res.status(200).json({
-                success: true,
-                message: "Details Updated.",
-            });
-        }
-        await User.findByIdAndUpdate(user._id, {
+        var updatedUser = await User.findByIdAndUpdate(user._id, {
             $set: {
                 ...data,
             },
-        });
+        }, { new: true });
+        if (req.files) {
+            const files = req.files;
+            if (files.avatar) {
+                const avatar = `${process.env.DOMAIN}/uploads/${user._id.toString()}/avatar/${files.avatar[0].originalname}`;
+                updatedUser = await User.findByIdAndUpdate(user._id, {
+                    $set: {
+                        avatar,
+                    },
+                }, { new: true });
+            }
+            if (files.background) {
+                const background = `${process.env.DOMAIN}/uploads/${user._id.toString()}/background/${files.background[0].originalname}`;
+                updatedUser = await User.findByIdAndUpdate(user._id, {
+                    $set: {
+                        background,
+                    },
+                }, { new: true });
+            }
+        }
         return res.status(200).json({
             success: true,
+            data: updatedUser,
             message: "Details Updated.",
         });
     }
