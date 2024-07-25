@@ -2,6 +2,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { v4 as uuidv4 } from "uuid";
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const avatarStorage = multer.diskStorage({
     destination: async function (req, file, cb) {
@@ -23,6 +24,23 @@ const avatarStorage = multer.diskStorage({
         cb(null, file.originalname);
     },
 });
+const groupIconStorage = multer.diskStorage({
+    destination: async function (req, file, cb) {
+        const chatId = uuidv4();
+        req.params.chatId = chatId;
+        const destinationPath = path.join(__dirname, "../../public/uploads/", chatId, "/icon");
+        fs.rmSync(destinationPath, { recursive: true, force: true });
+        fs.mkdirSync(destinationPath, { recursive: true });
+        cb(null, destinationPath);
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    },
+});
+export const uploadGroupIcon = multer({
+    limits: { fileSize: 1000000 },
+    storage: groupIconStorage,
+}).single("group_icon");
 const upload = multer({
     limits: { fileSize: 1000000 },
     storage: avatarStorage,
