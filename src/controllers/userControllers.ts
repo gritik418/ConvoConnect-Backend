@@ -215,6 +215,7 @@ export const userLogin = async (req: Request, res: Response) => {
     return res.status(200).cookie(CC_TOKEN, token, cookieOptions).json({
       success: true,
       message: "Logged In Successfully.",
+      token: token,
     });
   } catch (error) {
     if (error instanceof errors.E_VALIDATION_ERROR) {
@@ -281,6 +282,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
     return res.status(200).cookie(CC_TOKEN, token, cookieOptions).json({
       success: true,
       message: "Email verified Successfully.",
+      token,
     });
   } catch (error) {
     if (error instanceof errors.E_VALIDATION_ERROR) {

@@ -170,6 +170,7 @@ export const userLogin = async (req, res) => {
         return res.status(200).cookie(CC_TOKEN, token, cookieOptions).json({
             success: true,
             message: "Logged In Successfully.",
+            token: token,
         });
     }
     catch (error) {
@@ -227,6 +228,7 @@ export const verifyEmail = async (req, res) => {
         return res.status(200).cookie(CC_TOKEN, token, cookieOptions).json({
             success: true,
             message: "Email verified Successfully.",
+            token,
         });
     }
     catch (error) {
