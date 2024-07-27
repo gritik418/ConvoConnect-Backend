@@ -112,8 +112,8 @@ export const userSignup = async (req, res) => {
             from: "convoconnect@gmail.com",
             to: output.email,
             subject: "Verify your email address to continue with ConvoConnect.",
-            html: verificationTemplate(`${process.env.DOMAIN}/verify/${savedUser._id.toString()}/${secretToken}`),
-            text: `Verify your email address to continue with ConvoConnect.\n Visit: ${process.env.DOMAIN}/verify/${savedUser._id.toString()}/${secretToken} to verify your email.`,
+            html: verificationTemplate(`${process.env.CLIENT_URL}/verify/${savedUser._id.toString()}/${secretToken}`),
+            text: `Verify your email address to continue with ConvoConnect.\n Visit: ${process.env.CLIENT_URL}/verify/${savedUser._id.toString()}/${secretToken} to verify your email.`,
         });
         return res.status(201).json({
             success: true,

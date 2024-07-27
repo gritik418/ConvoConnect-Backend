@@ -153,11 +153,11 @@ export const userSignup = async (req: Request, res: Response) => {
       subject: "Verify your email address to continue with ConvoConnect.",
       html: verificationTemplate(
         `${
-          process.env.DOMAIN
+          process.env.CLIENT_URL
         }/verify/${savedUser._id.toString()}/${secretToken}`
       ),
       text: `Verify your email address to continue with ConvoConnect.\n Visit: ${
-        process.env.DOMAIN
+        process.env.CLIENT_URL
       }/verify/${savedUser._id.toString()}/${secretToken} to verify your email.`,
     });
 
