@@ -14,6 +14,7 @@ import { cookieOptions } from "../constants/options.js";
 import verificationSchema, {
   VerificationDataType,
 } from "../validators/verificationValidator.js";
+import verificationTemplate from "../utils/verificationTemplate.js";
 
 vine.errorReporter = () => new ErrorReporter();
 
@@ -149,11 +150,15 @@ export const userSignup = async (req: Request, res: Response) => {
     await sendEmail({
       from: "convoconnect@gmail.com",
       to: output.email,
-      subject: "Verify your email address.",
-      html: `Any ${secretToken} <br/>
-        <a href=${"http://localhost:3000"}/verify/${savedUser._id.toString()}/${secretToken}>Verify</a>
-        `,
-      text: "Verify your email address to continue with ConvoConnect.",
+      subject: "Verify your email address to continue with ConvoConnect.",
+      html: verificationTemplate(
+        `${
+          process.env.DOMAIN
+        }/verify/${savedUser._id.toString()}/${secretToken}`
+      ),
+      text: `Verify your email address to continue with ConvoConnect.\n Visit: ${
+        process.env.DOMAIN
+      }/verify/${savedUser._id.toString()}/${secretToken} to verify your email.`,
     });
 
     return res.status(201).json({
