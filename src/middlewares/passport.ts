@@ -38,6 +38,7 @@ passport.use(
             avatar: profile.photos
               ? profile.photos![0].value
               : `${process.env.DOMAIN}/images/avatar.jpeg`,
+            background: `${process.env.DOMAIN}/images/profile-bg.jpg`,
             provider: "google",
           });
 

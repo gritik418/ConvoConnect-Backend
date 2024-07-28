@@ -142,6 +142,16 @@ export const acceptFriendRequest = async (req: Request, res: Response) => {
     const user: any = req.params.user;
     const friendId: string = req.params.id;
 
+    user.friends.forEach((friend: string) => {
+      if (friend.toString() === friendId) {
+        return res.status(200).json({
+          success: true,
+          message: "Friend Request Accepted.",
+          id: friendId,
+        });
+      }
+    });
+
     const friend = await User.findById(friendId).select({ _id: 1 });
     if (!friend)
       return res
