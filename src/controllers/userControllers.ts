@@ -100,7 +100,6 @@ export const getUser = async (req: Request, res: Response) => {
   }
 };
 
-// Design Email Verification Template and also email subject
 export const userSignup = async (req: Request, res: Response) => {
   try {
     const data = req.body;
@@ -297,6 +296,20 @@ export const verifyEmail = async (req: Request, res: Response) => {
         errors: error.messages,
       });
     }
+    return res.status(500).json({
+      success: false,
+      message: "Server Error.",
+    });
+  }
+};
+
+export const userLogout = async (req: Request, res: Response) => {
+  try {
+    res.status(200).clearCookie(CC_TOKEN, cookieOptions).json({
+      success: true,
+      message: "Logged out Successfully.",
+    });
+  } catch (error) {
     return res.status(500).json({
       success: false,
       message: "Server Error.",

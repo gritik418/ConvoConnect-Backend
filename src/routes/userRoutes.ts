@@ -3,6 +3,7 @@ import {
   getUser,
   updateUser,
   userLogin,
+  userLogout,
   userSignup,
   verifyEmail,
 } from "../controllers/userControllers.js";
@@ -31,5 +32,7 @@ router.get("/verify/:id/:secretToken", verifyEmail);
 router.post("/signup", userSignup);
 
 router.post("/login", userLogin);
+
+router.get("/logout", userLogout);
 
 export default router;
