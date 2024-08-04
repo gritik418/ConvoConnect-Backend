@@ -154,6 +154,12 @@ export const userLogin = async (req, res) => {
                 message: "Invalid Credentials.",
             });
         }
+        if (user.provider === "google") {
+            return res.status(401).json({
+                success: false,
+                message: "Previously Logged in with Google.",
+            });
+        }
         const verify = await bcrypt.compare(output.password, user.password);
         if (!verify) {
             return res.status(401).json({
