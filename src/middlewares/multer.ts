@@ -9,6 +9,7 @@ const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const avatarStorage = multer.diskStorage({
   destination: async function (req: { params: any }, file, cb) {
     const userId = req.params.user._id.toString();
+    if (!file) return cb(new Error("No File"), "");
 
     if (file.fieldname === "avatar") {
       const destinationPath = path.join(

@@ -19,7 +19,9 @@ export const updateUser = async (req, res) => {
         const data = req.body;
         var updatedUser = await User.findByIdAndUpdate(user._id, {
             $set: {
-                ...data,
+                first_name: data.first_name,
+                last_name: data.last_name,
+                bio: data.bio,
             },
         }, { new: true });
         if (req.files) {

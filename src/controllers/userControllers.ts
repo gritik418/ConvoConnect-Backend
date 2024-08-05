@@ -27,7 +27,9 @@ export const updateUser = async (req: Request, res: Response) => {
       user._id,
       {
         $set: {
-          ...data,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          bio: data.bio,
         },
       },
       { new: true }
