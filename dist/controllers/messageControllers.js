@@ -7,7 +7,10 @@ export const getMessages = async (req, res) => {
             last_name: 1,
             _id: 1,
             avatar: 1,
+            background: 1,
             username: 1,
+            email: 1,
+            bio: 1,
         });
         const messages = {};
         for (const message of rawMessages) {

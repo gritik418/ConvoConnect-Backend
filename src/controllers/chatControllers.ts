@@ -3,6 +3,8 @@ import Chat from "../models/Chat.js";
 import vine, { errors } from "@vinejs/vine";
 import groupSchema, { GroupDataType } from "../validators/groupValidator.js";
 import { ErrorReporter } from "../validators/ErrorReporter.js";
+import { socketEventEmitter } from "../sockets/socketServer.js";
+import { SOCKET_EMIT_NEW_GROUP } from "../constants/events.js";
 
 vine.errorReporter = () => new ErrorReporter();
 
@@ -10,20 +12,32 @@ export const getChats = async (req: Request, res: Response) => {
   try {
     const user: any = req.params.user;
 
-    const chats = await Chat.find({ members: { $eq: user._id } })
+    const rawChats = await Chat.find({ members: { $eq: user._id } })
       .populate("members", {
         first_name: 1,
         last_name: 1,
         avatar: 1,
         username: 1,
+        email: 1,
+        bio: 1,
+        background: 1,
       })
       .populate("admins", {
         first_name: 1,
         last_name: 1,
+        email: 1,
+        bio: 1,
         avatar: 1,
         username: 1,
+        background: 1,
       })
       .populate("last_message");
+
+    const chats: any = {};
+
+    for (const chat of rawChats) {
+      chats[chat._id] = chat;
+    }
 
     return res.status(200).json({ success: true, data: { chats } });
   } catch (error) {
@@ -44,12 +58,18 @@ export const getChatById = async (req: Request, res: Response) => {
         last_name: 1,
         avatar: 1,
         username: 1,
+        background: 1,
+        email: 1,
+        bio: 1,
       })
       .populate("admins", {
         first_name: 1,
         last_name: 1,
         avatar: 1,
         username: 1,
+        background: 1,
+        email: 1,
+        bio: 1,
       });
 
     return res.status(200).json({
@@ -93,6 +113,11 @@ export const createGroupChat = async (req: Request, res: Response) => {
     });
 
     await newGroup.save();
+
+    socketEventEmitter.emit(SOCKET_EMIT_NEW_GROUP, {
+      group: newGroup,
+      user: user._id,
+    });
 
     return res.status(200).json({
       success: true,

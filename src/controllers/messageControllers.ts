@@ -12,7 +12,10 @@ export const getMessages = async (req: Request, res: Response) => {
         last_name: 1,
         _id: 1,
         avatar: 1,
+        background: 1,
         username: 1,
+        email: 1,
+        bio: 1,
       }
     );
 

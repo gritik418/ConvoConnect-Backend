@@ -6,15 +6,19 @@ import { CC_TOKEN } from "../constants/variables.js";
 import UserService from "../services/user.js";
 import {
   ACTIVE_FRIENDS,
+  NEW_GROUP,
   NEW_MESSAGE,
   OFFLINE_FRIEND,
   SEND_MESSAGE,
+  SOCKET_EMIT_NEW_GROUP,
 } from "../constants/events.js";
 import Message from "../models/Message.js";
 import { v4 as uuidv4 } from "uuid";
 import Chat from "../models/Chat.js";
+import EventEmitter from "events";
 
 const socketMembers = new Map();
+export const socketEventEmitter = new EventEmitter();
 
 const socketServer = (
   httpServer: http.Server<
@@ -95,6 +99,30 @@ const socketServer = (
         const savedMessage = await newMessage.save();
         await Chat.findByIdAndUpdate(selectedChat._id, {
           $set: { last_message: savedMessage._id },
+        });
+      }
+    );
+
+    socketEventEmitter.on(
+      SOCKET_EMIT_NEW_GROUP,
+      ({ group, user }: { group: ChatType | any; user: string }) => {
+        group.members.map((member: string) => {
+          if (member.toString() === user.toString()) return;
+          return io.to(socketMembers.get(member.toString())).emit(NEW_GROUP, {
+            group,
+          });
+        });
+      }
+    );
+
+    socketEventEmitter.off(
+      SOCKET_EMIT_NEW_GROUP,
+      ({ group, user }: { group: ChatType | any; user: string }) => {
+        group.members.map((member: string) => {
+          if (member.toString() === user.toString()) return;
+          return io.to(socketMembers.get(member.toString())).emit(NEW_GROUP, {
+            group,
+          });
         });
       }
     );

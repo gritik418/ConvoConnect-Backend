@@ -12,6 +12,7 @@ interface UserType {
   email_verified: boolean;
   is_active: boolean;
   avatar?: string;
+  background?: string;
   provider: Provider;
   password?: string;
   friends: string[];
@@ -24,6 +25,8 @@ type ChatMemberType = {
   last_name: ?string;
   avatar: ?string;
   username: string;
+  bio: ?string;
+  background?: string;
 };
 
 type ChatAdminType = {
@@ -32,6 +35,7 @@ type ChatAdminType = {
   last_name: ?string;
   avatar: ?string;
   username: string;
+  background?: string;
 };
 
 interface ChatType {
