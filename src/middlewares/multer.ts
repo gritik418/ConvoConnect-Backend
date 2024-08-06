@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { v4 as uuidv4 } from "uuid";
+import Chat from "../models/Chat.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
@@ -60,9 +61,44 @@ const groupIconStorage = multer.diskStorage({
   },
 });
 
+const updateGroupIconStorage = multer.diskStorage({
+  destination: async function (req: { params: any }, file, cb) {
+    const chat: ChatType | null = await Chat.findById(req.params.chatId);
+    if (!chat) {
+      return cb(new Error("No File."), "");
+    }
+
+    const chatIds: string[] = chat.admins.map((admin: ChatAdminType) =>
+      admin._id.toString()
+    );
+
+    if (!chatIds.includes(req.params.user._id.toString())) {
+      return cb(new Error("Only admin can update."), "");
+    }
+
+    const destinationPath = path.join(
+      __dirname,
+      "../../public/uploads/",
+      chat._id.toString(),
+      "/icon"
+    );
+    fs.rmSync(destinationPath, { recursive: true, force: true });
+    fs.mkdirSync(destinationPath, { recursive: true });
+    cb(null, destinationPath);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
 export const uploadGroupIcon = multer({
   limits: { fileSize: 1000000 },
   storage: groupIconStorage,
+}).single("group_icon");
+
+export const updateGroupIcon = multer({
+  limits: { fileSize: 1000000 },
+  storage: updateGroupIconStorage,
 }).single("group_icon");
 
 const upload = multer({

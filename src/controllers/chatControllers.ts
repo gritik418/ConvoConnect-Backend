@@ -137,3 +137,55 @@ export const createGroupChat = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updateGroupInfo = async (req: Request, res: Response) => {
+  try {
+    const user: any = req.params.user;
+    const data = req.body;
+
+    const chat: ChatType | null = await Chat.findById(req.params.chatId);
+    if (!chat) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Chat Id.",
+      });
+    }
+
+    const chatIds: string[] = chat.admins.map((admin: ChatAdminType) =>
+      admin._id.toString()
+    );
+
+    if (!chatIds.includes(user._id.toString())) {
+      return res.status(401).json({
+        success: false,
+        message: "Only Admin can update.",
+      });
+    }
+
+    if (req.file && req.params.chatId) {
+      const group_icon = `${process.env.DOMAIN}/uploads/${req.params.chatId}/icon/${req.file.originalname}`;
+      await Chat.findByIdAndUpdate(chat._id, {
+        $set: {
+          group_icon,
+        },
+      });
+    }
+
+    await Chat.findByIdAndUpdate(chat._id, {
+      $set: {
+        group_name: data.group_name,
+        group_description: data.group_description,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Group info updated.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server Error.",
+    });
+  }
+};
