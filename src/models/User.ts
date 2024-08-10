@@ -62,6 +62,10 @@ const UserSchema = new Schema(
         ref: "User",
       },
     ],
+    status: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Status",
+    },
   },
   {
     timestamps: true,

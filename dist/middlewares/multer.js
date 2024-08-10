@@ -59,6 +59,20 @@ const updateGroupIconStorage = multer.diskStorage({
         cb(null, file.originalname);
     },
 });
+const statusStorage = multer.diskStorage({
+    destination: async function (req, file, cb) {
+        const userId = req.params.user._id.toString();
+        if (!file)
+            return cb(new Error("No File"), "");
+        console.log("file", file);
+        const destinationPath = path.join(__dirname, "../../public/uploads/", userId, "/status");
+        fs.mkdirSync(destinationPath, { recursive: true });
+        cb(null, destinationPath);
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    },
+});
 export const uploadGroupIcon = multer({
     limits: { fileSize: 1000000 },
     storage: groupIconStorage,
@@ -67,6 +81,10 @@ export const updateGroupIcon = multer({
     limits: { fileSize: 1000000 },
     storage: updateGroupIconStorage,
 }).single("group_icon");
+export const uploadStatus = multer({
+    limits: { fileSize: 1000000 },
+    storage: statusStorage,
+}).array("images", 4);
 const upload = multer({
     limits: { fileSize: 1000000 },
     storage: avatarStorage,

@@ -13,6 +13,7 @@ import friendRoutes from "./routes/friendRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import statusRoutes from "./routes/statusRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -53,6 +54,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/friend", friendRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/status", statusRoutes);
 app.use("/auth", authRoutes);
 
 server.listen(PORT, () => {
