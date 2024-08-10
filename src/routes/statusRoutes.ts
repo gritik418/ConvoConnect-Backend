@@ -3,6 +3,7 @@ import { uploadStatus } from "../middlewares/multer.js";
 import authenticate from "../middlewares/authenticate.js";
 import multer from "multer";
 import {
+  getFriendStatus,
   getUserStatus,
   removeUserStatus,
   uploadUserStatus,
@@ -16,6 +17,8 @@ const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const router = Router();
 
 router.get("/", authenticate, getUserStatus);
+
+router.get("/friends", authenticate, getFriendStatus);
 
 router.post("/upload", authenticate, function (req: any, res) {
   const destinationPath = path.join(

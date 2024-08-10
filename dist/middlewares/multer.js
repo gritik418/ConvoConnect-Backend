@@ -64,7 +64,6 @@ const statusStorage = multer.diskStorage({
         const userId = req.params.user._id.toString();
         if (!file)
             return cb(new Error("No File"), "");
-        console.log("file", file);
         const destinationPath = path.join(__dirname, "../../public/uploads/", userId, "/status");
         fs.mkdirSync(destinationPath, { recursive: true });
         cb(null, destinationPath);

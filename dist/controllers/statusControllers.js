@@ -16,6 +16,29 @@ export const getUserStatus = async (req, res) => {
         });
     }
 };
+export const getFriendStatus = async (req, res) => {
+    try {
+        const user = req.params.user;
+        const status = await User.findById(user._id)
+            .select({ friends: 1, _id: 0 })
+            .populate({
+            path: "friends",
+            model: "User",
+            select: "status first_name last_name avatar username",
+            populate: { path: "status", model: "Status" },
+        });
+        return res.status(200).json({
+            success: true,
+            data: status,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server Error.",
+        });
+    }
+};
 export const uploadUserStatus = async (req, res) => {
     try {
         const user = req.params.user;
