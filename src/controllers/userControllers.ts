@@ -15,6 +15,12 @@ import verificationSchema, {
   VerificationDataType,
 } from "../validators/verificationValidator.js";
 import verificationTemplate from "../utils/verificationTemplate.js";
+import ResetPassword from "../models/ResetPassword.js";
+import forgotPasswordTemplate from "../utils/forgotPasswordTemplate.js";
+import resetPasswordSuccessTemplate from "../utils/resetPasswordSuccessTemplate.js";
+import resetPasswordSchema, {
+  ResetPasswordSchemaDataType,
+} from "../validators/resetPasswordValidator.js";
 
 vine.errorReporter = () => new ErrorReporter();
 
@@ -318,6 +324,135 @@ export const userLogout = async (req: Request, res: Response) => {
       message: "Logged out Successfully.",
     });
   } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server Error.",
+    });
+  }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    const user: UserType = await UserService.getUserByEmail(email);
+    if (!user || !user.email_verified) {
+      return res.status(401).json({
+        success: false,
+        message: "Email does not exists.",
+      });
+    }
+
+    const secretToken = uuidv4();
+
+    const resetToken = new ResetPassword({
+      user_id: user._id,
+      secret_token: secretToken,
+    });
+
+    await resetToken.save();
+
+    const link = `${
+      process.env.CLIENT_URL
+    }/reset-password/${user._id.toString()}/${secretToken}`;
+
+    await sendEmail({
+      from: "convoconnect@gmail.com",
+      to: email,
+      subject: "Forgot Password?",
+      html: forgotPasswordTemplate(link),
+      text: `Use the link to reset your ConvoConnect account's password.\n Visit: ${
+        process.env.CLIENT_URL
+      }/reset-password/${user._id.toString()}/${secretToken} to reset your password.`,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Email Sent.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server Error.",
+    });
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { new_password, confirm_new_password } = req.body;
+    const { userId, secretToken } = req.params;
+
+    const output: ResetPasswordSchemaDataType = await vine.validate({
+      data: { new_password },
+      schema: resetPasswordSchema,
+    });
+
+    if (output.new_password !== confirm_new_password) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation Error.",
+        errors: {
+          confirm_new_password: "Password and confirm password must be same.",
+        },
+      });
+    }
+
+    const user: UserType = await UserService.getUserById(userId);
+
+    if (!user || !user.email_verified) {
+      return res.status(401).json({
+        success: false,
+        message: "Email does not exists.",
+      });
+    }
+
+    const resetToken = await ResetPassword.findOne({ user_id: user._id });
+
+    if (!resetToken) {
+      return res.status(401).json({
+        success: false,
+        message: "Link Expired.",
+      });
+    }
+
+    const verify = await bcrypt.compare(secretToken, resetToken.secret_token);
+
+    if (!verify) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid Token.",
+      });
+    }
+
+    const hashedPassword = await UserService.hashPassword(output.new_password);
+
+    await User.findByIdAndUpdate(user._id, {
+      $set: {
+        password: hashedPassword,
+      },
+    });
+
+    await sendEmail({
+      from: "convoconnect@gmail.com",
+      to: user.email,
+      subject: "Password Changed Successfully.",
+      html: resetPasswordSuccessTemplate(),
+      text: `This is to confirm that the password for your ConvoConnect account has been successfully changed.`,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Password Changed Successfully.",
+    });
+  } catch (error) {
+    if (error instanceof errors.E_VALIDATION_ERROR) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation Error.",
+        errors: error.messages,
+      });
+    }
     return res.status(500).json({
       success: false,
       message: "Server Error.",

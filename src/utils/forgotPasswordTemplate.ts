@@ -1,4 +1,4 @@
-const verificationTemplate = (link: string) => {
+const forgotPasswordTemplate = (link: string) => {
   return `<head>
   <title></title>
   <!--[if !mso]><!-- -->
@@ -88,7 +88,7 @@ const verificationTemplate = (link: string) => {
         <v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
       <![endif]--><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#7289DA url(https://cdn.discordapp.com/email_assets/f0a4cc6d7aaa7bdf2a3c15a193c6d224.png) top center / cover no-repeat;" align="center" border="0" background="https://cdn.discordapp.com/email_assets/f0a4cc6d7aaa7bdf2a3c15a193c6d224.png"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;"><!--[if mso | IE]>
       <table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:undefined;width:640px;">
-      <![endif]--><div style="cursor:auto;color:white;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">Welcome to ConvoConnect!</div><!--[if mso | IE]>
+      <![endif]--><div style="cursor:auto;color:white;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">ConvoConnect</div><!--[if mso | IE]>
       </td></tr></table>
       <![endif]--></td></tr></tbody></table><!--[if mso | IE]>
         </v:textbox>
@@ -103,15 +103,17 @@ const verificationTemplate = (link: string) => {
       <![endif]--><div style="margin:0px auto;max-width:640px;background:#ffffff;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#ffffff;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:40px 70px;"><!--[if mso | IE]>
       <table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;width:640px;">
       <![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px 0px 20px;" align="left"><div style="cursor:auto;color:#737F8D;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;line-height:20px;text-align:left;">
-             <p><img src=${`${process.env.CLIENT_URL}/images/email-verification-mail.jpg`} alt="img" title="None" style="height: auto;width: 90%;max-width: 500px;"></p>
-<p>Before we get started, we'll need to verify your email.</p>
+             <p><img src=${`${process.env.CLIENT_URL}/images/forgot-password-mail.jpg`} alt="img" title="None" style="height: auto;width: 90%;max-width: 500px;"></p>
+<p>You have requested to reset your password.</p>
     
-    <p>You will be redirected to iNotes for verification.</p>
-    <p>The link is valid only for 10 minutes.</p>
-    <p><br />If you didn't create an account with <strong>ConvoConnect</strong>, you can safely delete this email.</p>
+    <p>We cannot simply send you your old password. A unique link to reset your password has been generated for you.</p>
+    <p> To reset your password, click the following link and follow the instructions.</p>
+    <p>The Link to Reset Password is valid only for 10 minutes.</p>
+    <p><br />If you didn't send any reset password request to <strong>ConvoConnect</strong>, you can safely delete this email.</p>
+    
 
           </div></td></tr><tr><td style="word-break:break-word;font-size:0px;padding:10px 25px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:separate;" align="center" border="0"><tbody><tr><td style="border:none;border-radius:3px;color:white;cursor:auto;padding:15px 19px;" align="center" valign="middle" bgcolor="#7289DA"><a href=${link} style="text-decoration:none;line-height:100%;background:#7289DA;color:white;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:15px;font-weight:normal;text-transform:none;margin:0px;" target="_blank">
-            Verify Email
+            Reset your Password
           </a></td></tr></tbody></table></td></tr></tbody></table></div><!--[if mso | IE]>
       </td></tr></table>
       <![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
@@ -148,7 +150,7 @@ const verificationTemplate = (link: string) => {
       <![endif]--><div aria-labelledby="mj-column-per-100" class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
       • Sent by ConvoConnect •
     </div></td></tr><tr><br/><td style="word-break:break-word;font-size:0px;padding:0px;" align="center"><div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;padding:20px;">
-       You received this email because we received a request for Signup to ConvoConnect with this account. If you didn't request this action you can safely delete this email.
+       You received this email because we received a Forgot Password request from this account. If you didn't request this action you can safely delete this email.
     </div></td></tr></tbody></table></div><!--[if mso | IE]>
       </td></tr></table>
       <![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
@@ -158,4 +160,4 @@ const verificationTemplate = (link: string) => {
 </body>`;
 };
 
-export default verificationTemplate;
+export default forgotPasswordTemplate;
