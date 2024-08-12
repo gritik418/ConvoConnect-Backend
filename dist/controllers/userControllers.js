@@ -349,6 +349,7 @@ export const resetPassword = async (req, res) => {
                 password: hashedPassword,
             },
         });
+        await ResetPassword.findByIdAndDelete(resetToken._id);
         await sendEmail({
             from: "convoconnect@gmail.com",
             to: user.email,

@@ -433,6 +433,8 @@ export const resetPassword = async (req: Request, res: Response) => {
       },
     });
 
+    await ResetPassword.findByIdAndDelete(resetToken._id);
+
     await sendEmail({
       from: "convoconnect@gmail.com",
       to: user.email,
